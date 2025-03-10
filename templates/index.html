@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Phishing URL Detector</title>
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+            <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        </head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Phishing URL Detector</h1>
+        <form action="/predict" method="POST" class="mt-4">
+            <div class="form-group">
+                <label for="url">Enter URL:</label>
+                <input type="text" class="form-control" id="url" name="url" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Check URL</button>
+        </form>
+        
+        {% if prediction_rf %}
+        <div class="alert alert-info mt-4">
+            <strong>Random Forest Prediction:</strong> {{ prediction_rf }}
+        </div>
+        {% endif %}
+        
+        {% if prediction_xgb %}
+        <div class="alert alert-info mt-4">
+            <strong>XGBoost Prediction:</strong> {{ prediction_xgb }}
+        </div>
+        {% endif %}
+        
+        {% if prediction_log_reg %}
+        <div class="alert alert-info mt-4">
+            <strong>Logistic Regression Prediction:</strong> {{ prediction_log_reg }}
+        </div>
+        {% endif %}
+
+        {% if prediction_decision_tree %}
+        <div class="alert alert-info mt-4">
+            <strong>Decision Tree Prediction:</strong> {{ prediction_decision_tree }}
+        </div>
+        {% endif %}
+
+        {% if prediction_knn %}
+        <div class="alert alert-info mt-4">
+            <strong>KNN Prediction:</strong> {{ prediction_knn }}
+        </div>
+        {% endif %}
+
+        {% if prediction_svm %}
+        <div class="alert alert-info mt-4">
+            <strong>SVM Prediction:</strong> {{ prediction_svm }}
+        </div>
+        {% endif %}
+
+    </div>
+</body>
+</html>

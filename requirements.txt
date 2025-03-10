@@ -1,0 +1,12 @@
+#python-dependecies
+pandas
+numpy
+tldextract
+requests
+whois
+python-whois
+scikit-learn
+xgboost
+tensorflow
+keras
+flask
