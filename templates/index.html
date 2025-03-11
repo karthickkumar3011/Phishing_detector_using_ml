@@ -1,60 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
-    <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Phishing URL Detector</title>
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-            <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-        </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing URL Detector</title>
+    <link rel="icon" type="image/png" href="/static/favicon.ico">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
 <body>
-    <div class="container">
-        <h1 class="mt-5">Phishing URL Detector</h1>
-        <form action="/predict" method="POST" class="mt-4">
-            <div class="form-group">
-                <label for="url">Enter URL:</label>
-                <input type="text" class="form-control" id="url" name="url" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Check URL</button>
-        </form>
-        
-        {% if prediction_rf %}
-        <div class="alert alert-info mt-4">
-            <strong>Random Forest Prediction:</strong> {{ prediction_rf }}
-        </div>
-        {% endif %}
-        
-        {% if prediction_xgb %}
-        <div class="alert alert-info mt-4">
-            <strong>XGBoost Prediction:</strong> {{ prediction_xgb }}
-        </div>
-        {% endif %}
-        
-        {% if prediction_log_reg %}
-        <div class="alert alert-info mt-4">
-            <strong>Logistic Regression Prediction:</strong> {{ prediction_log_reg }}
-        </div>
-        {% endif %}
 
-        {% if prediction_decision_tree %}
-        <div class="alert alert-info mt-4">
-            <strong>Decision Tree Prediction:</strong> {{ prediction_decision_tree }}
+    <!-- Hero Section -->
+    <div class="container mt-4">
+        <div class="hero-section">
+            <h1>🔍 Phishing URL Detector</h1>
+            <p>Check if a URL is safe or phishing using AI-based detection.</p>
         </div>
-        {% endif %}
-
-        {% if prediction_knn %}
-        <div class="alert alert-info mt-4">
-            <strong>KNN Prediction:</strong> {{ prediction_knn }}
-        </div>
-        {% endif %}
-
-        {% if prediction_svm %}
-        <div class="alert alert-info mt-4">
-            <strong>SVM Prediction:</strong> {{ prediction_svm }}
-        </div>
-        {% endif %}
-
     </div>
+
+    <!-- Input Section -->
+    <div class="container mt-4">
+        <div class="card shadow-lg p-4">
+            <form action="/predict" method="POST">
+                <div class="form-group">
+                    <label for="url"><strong>Enter URL:</strong></label>
+                    <input type="text" class="form-control" id="url" name="url" required placeholder="https://example.com">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Check URL</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    {% if prediction_rf or prediction_xgb or prediction_log_reg or prediction_decision_tree or prediction_knn or prediction_svm or prediction_nb %}
+    <div class="container result-box">
+        <h3 class="text-center">🛡️ Predictions</h3>
+        <ul class="list-group">
+            {% if prediction_rf %} <li class="list-group-item"><strong>Random Forest:</strong> {{ prediction_rf }}</li> {% endif %}
+            {% if prediction_xgb %} <li class="list-group-item"><strong>XGBoost:</strong> {{ prediction_xgb }}</li> {% endif %}
+            {% if prediction_log_reg %} <li class="list-group-item"><strong>Logistic Regression:</strong> {{ prediction_log_reg }}</li> {% endif %}
+            {% if prediction_decision_tree %} <li class="list-group-item"><strong>Decision Tree:</strong> {{ prediction_decision_tree }}</li> {% endif %}
+            {% if prediction_knn %} <li class="list-group-item"><strong>KNN:</strong> {{ prediction_knn }}</li> {% endif %}
+            {% if prediction_svm %} <li class="list-group-item"><strong>SVM:</strong> {{ prediction_svm }}</li> {% endif %}
+            {% if prediction_nb %} <li class="list-group-item"><strong>Naïve Bayes:</strong> {{ prediction_nb }}</li> {% endif %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- How It Works Section -->
+    <div class="container mt-5">
+        <h2 class="text-center">🚀 How It Works</h2>
+        <div class="row text-center mt-3">
+            <div class="col-md-4">
+                <i class="fas fa-link fa-3x text-primary"></i>
+                <h4>Enter URL</h4>
+                <p>Paste any website link into the input field.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-shield-alt fa-3x text-success"></i>
+                <h4>Analyze</h4>
+                <p>Our AI-based model evaluates its safety.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-exclamation-triangle fa-3x text-danger"></i>
+                <h4>Get Result</h4>
+                <p>Find out if it's safe or a phishing attempt.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="container mt-5">
+        <h2 class="text-center">📞 Contact Us</h2>
+        <p class="text-center">Have questions? Reach out to us!</p>
+        <div class="text-center">
+            <a href="mailto:support@example.com" class="btn btn-outline-primary">Email Us</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Phishing Detector | Developed with ❤️</p>
+    </footer>
+
+    <!-- Bootstrap & JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
