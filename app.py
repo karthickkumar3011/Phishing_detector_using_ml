@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash
 import pandas as pd
 import joblib  # For loading the models
 import numpy as np
@@ -9,6 +9,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'  # Needed for flashing messages
 
 # Load your models
 rf_model = joblib.load(r'saved_models/Random_Forest.pkl')
@@ -26,7 +27,11 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     url = request.form['url']
-    features = extract_features(url)  # Extract features from the URL
+    try:
+        features = extract_features(url)  # Extract features from the URL
+    except Exception as e:
+        flash(f"Error extracting features: {str(e)}", "danger")
+        return render_template('index.html')
 
     # Prepare the feature array for prediction
     feature_array = np.array([[features["url_length"],
@@ -56,22 +61,19 @@ def predict():
     nb_prediction = nb_model.predict(feature_array)
 
     # Interpret the predictions
-    rf_result = "Phishing" if rf_prediction[0] == 0 else "Legitimate"
-    xgb_result = "Phishing" if xgb_prediction[0] == 0 else "Legitimate"
-    log_reg_result = "Phishing" if log_reg_prediction[0] == 0 else "Legitimate"
-    decision_tree_result = "Phishing" if decision_tree_prediction[0] == 0 else "Legitimate"
-    knn_result = "Phishing" if knn_prediction[0] == 0 else "Legitimate"
-    svm_result = "Phishing" if svm_prediction[0] == 0 else "Legitimate"
-    nb_result = "Phishing" if nb_prediction[0] == 0 else "Legitimate"
+    predictions = [rf_prediction[0], xgb_prediction[0], log_reg_prediction[0], decision_tree_prediction[0], knn_prediction[0], svm_prediction[0], nb_prediction[0]]
+    results = ["Phishing" if pred == 0 else "Legitimate" for pred in predictions]
+    majority_vote = "Phishing" if results.count("Phishing") > results.count("Legitimate") else "Legitimate"
 
     return render_template('index.html', 
-                           prediction_rf=rf_result, 
-                           prediction_xgb=xgb_result,
-                           prediction_log_reg=log_reg_result,
-                           prediction_decision_tree=decision_tree_result,
-                           prediction_knn=knn_result,
-                           prediction_svm=svm_result,
-                           prediction_nb=nb_result
+                           prediction_rf=results[0], 
+                           prediction_xgb=results[1],
+                           prediction_log_reg=results[2],
+                           prediction_decision_tree=results[3],
+                           prediction_knn=results[4],
+                           prediction_svm=results[5],
+                           prediction_nb=results[6],
+                           majority_vote=majority_vote
                            )
 
 if __name__ == '__main__':

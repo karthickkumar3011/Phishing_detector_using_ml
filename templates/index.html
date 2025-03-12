@@ -32,18 +32,32 @@
         </div>
     </div>
 
+    <!-- Flash Messages -->
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alert alert-danger">
+                    {% for category, message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+
     <!-- Results Section -->
-    {% if prediction_rf or prediction_xgb or prediction_log_reg or prediction_decision_tree or prediction_knn or prediction_svm or prediction_nb %}
-    <div class="container result-box">
+    {% if majority_vote %}
+    <div class="container result-box mt-4">
         <h3 class="text-center">🛡️ Predictions</h3>
         <ul class="list-group">
-            {% if prediction_rf %} <li class="list-group-item"><strong>Random Forest:</strong> {{ prediction_rf }}</li> {% endif %}
-            {% if prediction_xgb %} <li class="list-group-item"><strong>XGBoost:</strong> {{ prediction_xgb }}</li> {% endif %}
-            {% if prediction_log_reg %} <li class="list-group-item"><strong>Logistic Regression:</strong> {{ prediction_log_reg }}</li> {% endif %}
-            {% if prediction_decision_tree %} <li class="list-group-item"><strong>Decision Tree:</strong> {{ prediction_decision_tree }}</li> {% endif %}
-            {% if prediction_knn %} <li class="list-group-item"><strong>KNN:</strong> {{ prediction_knn }}</li> {% endif %}
-            {% if prediction_svm %} <li class="list-group-item"><strong>SVM:</strong> {{ prediction_svm }}</li> {% endif %}
-            {% if prediction_nb %} <li class="list-group-item"><strong>Naïve Bayes:</strong> {{ prediction_nb }}</li> {% endif %}
+            <li class="list-group-item"><strong>Random Forest:</strong> {{ prediction_rf }}</li>
+            <li class="list-group-item"><strong>XGBoost:</strong> {{ prediction_xgb }}</li>
+            <li class="list-group-item"><strong>Logistic Regression:</strong> {{ prediction_log_reg }}</li>
+            <li class="list-group-item"><strong>Decision Tree:</strong> {{ prediction_decision_tree }}</li>
+            <li class="list-group-item"><strong>KNN:</strong> {{ prediction_knn }}</li>
+            <li class="list-group-item"><strong>SVM:</strong> {{ prediction_svm }}</li>
+            <li class="list-group-item"><strong>Naïve Bayes:</strong> {{ prediction_nb }}</li>
+            <li class="list-group-item font-weight-bold"><strong>Majority Vote:</strong> {{ majority_vote }}</li>
         </ul>
     </div>
     {% endif %}
