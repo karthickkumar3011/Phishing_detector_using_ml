@@ -7,6 +7,5 @@ whois
 python-whois
 scikit-learn
 xgboost
-tensorflow
 keras
 flask
