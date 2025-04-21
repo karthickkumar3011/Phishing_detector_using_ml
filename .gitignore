@@ -2,4 +2,7 @@ pvenv/
 __pycache__/
 *.pyc
 *.pyo
-instance/messages.db
+*.pyd
+*.db
+instance/
+*.log
