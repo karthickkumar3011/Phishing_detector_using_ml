@@ -7,24 +7,142 @@
     <link rel="icon" type="image/png" href="/static/favicon.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/style.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+        }
+
+        .navbar {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            padding: 60px 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            font-weight: 600;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background-color: #2575fc;
+            border: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #1a5bb8;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+
+        footer a {
+            color: #ffc107;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        input[type="url"] {
+            border: 2px solid #ced4da;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="url"]:focus {
+            border-color: #2575fc;
+            outline: none;
+            box-shadow: 0 0 5px rgba(37, 117, 252, 0.5);
+        }
+
+        /* Loading Spinner */
+        #loading-spinner {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #loading-spinner img {
+            width: 50px;
+            height: 50px;
+        }
+
+        #loading-spinner p {
+            font-size: 1.2rem;
+            color: #2575fc;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Phishing Detector</a>
+    </nav>
 
     <!-- Hero Section -->
-    <div class="container mt-4">
+    <div class="container mt-5">
         <div class="hero-section">
             <h1>🔍 Phishing URL Detector</h1>
             <p>Check if a URL is safe or phishing using AI-based detection.</p>
         </div>
     </div>
 
+    <!-- Description Section -->
+    <div class="container mt-4">
+        <div class="alert alert-info">
+            <h5>How It Works:</h5>
+            <p>Enter a URL in the input field below, and our AI-based system will analyze it to determine whether it is safe or a phishing attempt. The result will be displayed as a final verdict.</p>
+            <p><strong>Examples:</strong></p>
+            <ul>
+                <li>https://example.com</li>
+                <li>https://secure-login.com</li>
+                <li>http://malicious-site.com</li>
+            </ul>
+        </div>
+    </div>
+
     <!-- Input Section -->
     <div class="container mt-4">
         <div class="card shadow-lg p-4">
+            <h3 class="text-center">Enter a URL to Check</h3>
             <form id="urlForm" action="/predict" method="POST">
                 <div class="form-group">
-                    <label for="url"><strong>Enter URL:</strong></label>
+                    <label for="url"><strong>URL:</strong></label>
                     <input type="url" class="form-control" id="url" name="url" required placeholder="https://example.com">
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Check URL</button>
@@ -32,83 +150,39 @@
         </div>
     </div>
 
-    <!-- Flash Messages -->
-    <div class="container mt-4">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="alert alert-danger">
-                    {% for category, message in messages %}
-                        <p>{{ message }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
+    <!-- Loading Spinner -->
+    <div id="loading-spinner">
+        <img src="/static/Search.gif" alt="Loading...">
+        <p>Processing your request...</p>
     </div>
 
     <!-- Results Section -->
     {% if majority_vote %}
-    <div class="container result-box mt-4">
-        <h3 class="text-center">🛡️ Predictions</h3>
-        <ul class="list-group">
-            <li class="list-group-item"><strong>Random Forest:</strong> {{ prediction_rf }}</li>
-            <li class="list-group-item"><strong>XGBoost:</strong> {{ prediction_xgb }}</li>
-            <li class="list-group-item"><strong>Logistic Regression:</strong> {{ prediction_log_reg }}</li>
-            <li class="list-group-item"><strong>Decision Tree:</strong> {{ prediction_decision_tree }}</li>
-            <li class="list-group-item"><strong>KNN:</strong> {{ prediction_knn }}</li>
-            <li class="list-group-item"><strong>SVM:</strong> {{ prediction_svm }}</li>
-            <li class="list-group-item"><strong>Naïve Bayes:</strong> {{ prediction_nb }}</li>
-            <li class="list-group-item font-weight-bold"><strong>Majority Vote:</strong> {{ majority_vote }}</li>
-        </ul>
+    <div class="container mt-4">
+        <div class="card shadow-lg p-4">
+            <h3 class="text-center">🛡️ Final Verdict</h3>
+            <p class="text-center font-weight-bold display-4">{{ majority_vote }}</p>
+            <p class="text-center">
+                <small>
+                    <strong>Note:</strong> "Phishing" indicates a high likelihood of the URL being malicious. "Legitimate" means the URL is likely safe to use.
+                </small>
+            </p>
+        </div>
     </div>
     {% endif %}
 
-    <!-- How It Works Section -->
-    <div class="container mt-5">
-        <h2 class="text-center">🚀 How It Works</h2>
-        <div class="row text-center mt-3">
-            <div class="col-md-4">
-                <i class="fas fa-link fa-3x text-primary"></i>
-                <h4>Enter URL</h4>
-                <p>Paste any website link into the input field.</p>
-            </div>
-            <div class="col-md-4">
-                <i class="fas fa-shield-alt fa-3x text-success"></i>
-                <h4>Analyze</h4>
-                <p>Our AI-based model evaluates its safety.</p>
-            </div>
-            <div class="col-md-4">
-                <i class="fas fa-exclamation-triangle fa-3x text-danger"></i>
-                <h4>Get Result</h4>
-                <p>Find out if it's safe or a phishing attempt.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Contact Section -->
-    <div class="container mt-5">
-        <h2 class="text-center">📞 Contact Us</h2>
-        <p class="text-center">Have questions? Reach out to us!</p>
-        <div class="text-center">
-            <a href="mailto:support@example.com" class="btn btn-outline-primary">Email Us</a>
-        </div>
-    </div>
-
     <!-- Footer -->
-    <footer>
+    <footer class="text-center">
         <p>&copy; 2025 Phishing Detector | Developed with ❤️</p>
+        <p><a href="/contact">Contact Us</a> | <a href="/privacy">Privacy Policy</a></p>
     </footer>
 
     <!-- Bootstrap & JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.getElementById('urlForm').addEventListener('submit', function(event) {
-            var urlInput = document.getElementById('url').value;
-            var urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
-            if (!urlPattern.test(urlInput)) {
-                alert('Please enter a valid URL.');
-                event.preventDefault();
-            }
+        document.getElementById('urlForm').addEventListener('submit', function() {
+            document.getElementById('loading-spinner').style.display = 'block';
         });
     </script>
 </body>

@@ -1,36 +1,109 @@
+/* General Body Styling */
 body {
     background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
 }
 
+/* Navbar Styling */
+.navbar {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Hero Section Styling */
 .hero-section {
-    background: linear-gradient(to right, #007bff, #00c6ff);
+    background: linear-gradient(135deg, #007bff, #6610f2);
     color: white;
     padding: 50px 20px;
-    text-align: center;
     border-radius: 10px;
+    text-align: center;
 }
 
 .hero-section h1 {
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: bold;
 }
 
+.hero-section p {
+    font-size: 1.2rem;
+}
+
+/* Card Styling */
 .card {
+    border: none;
     border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.result-box {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+/* Button Styling */
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    transition: background-color 0.3s ease;
 }
 
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Footer Styling */
 footer {
-    margin-top: 40px;
-    padding: 20px;
     background-color: #343a40;
     color: white;
+    padding: 20px 0;
+    margin-top: 50px;
+}
+
+footer a {
+    color: #ffc107;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Flash Messages Styling */
+.alert {
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+/* Results Section Styling */
+.result-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
+}
+
+.result-card h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.result-card p {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.result-card p.phishing {
+    color: #dc3545;
+}
+
+/* Input Field Styling */
+input[type="url"] {
+    border: 2px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+input[type="url"]:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Phishing Detector</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">Phishing Detector</a>
+    </nav>
+
+    <!-- Contact Section -->
+    <div class="container mt-5">
+        <div class="card shadow-lg p-4">
+            <h1 class="text-center">📞 Contact Us</h1>
+            <p class="text-center">We'd love to hear from you! Feel free to reach out with any questions, feedback, or support requests.</p>
+            <form action="/send_message" method="POST">
+                <div class="form-group">
+                    <label for="name"><strong>Name:</strong></label>
+                    <input type="text" class="form-control" id="name" name="name" required placeholder="Your Name">
+                </div>
+                <div class="form-group">
+                    <label for="email"><strong>Email:</strong></label>
+                    <input type="email" class="form-control" id="email" name="email" required placeholder="Your Email">
+                </div>
+                <div class="form-group">
+                    <label for="message"><strong>Message:</strong></label>
+                    <textarea class="form-control" id="message" name="message" rows="5" required placeholder="Your Message"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+     <!-- Flash Messages -->
+     <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alert alert-danger">
+                    {% for category, message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center mt-5">
+        <p>&copy; 2025 Phishing Detector | Developed with ❤️</p>
+        <p><a href="/">Home</a> | <a href="mailto:support@example.com">Email Us</a></p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

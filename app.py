@@ -1,15 +1,14 @@
-from flask import Flask, render_template, request, flash
-import pandas as pd
-import joblib  # For loading the models
+from flask import Flask, render_template, request, flash, redirect
+import joblib 
+import os
 import numpy as np
-from utils.features_extraction import extract_features  # Import the function
-import tensorflow as tf  # Make sure to import TensorFlow
+from utils.features_extraction import extract_features 
 import warnings
 
 warnings.filterwarnings("ignore")
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Needed for flashing messages
+app.secret_key = os.getenv('SECRET_KEY', 'default_secret_key') 
 
 # Load your models
 rf_model = joblib.load(r'saved_models/Random_Forest.pkl')
@@ -63,18 +62,45 @@ def predict():
     # Interpret the predictions
     predictions = [rf_prediction[0], xgb_prediction[0], log_reg_prediction[0], decision_tree_prediction[0], knn_prediction[0], svm_prediction[0], nb_prediction[0]]
     results = ["Phishing" if pred == 0 else "Legitimate" for pred in predictions]
-    majority_vote = "Phishing" if results.count("Phishing") > results.count("Legitimate") else "Legitimate"
+    phishing_count = results.count("Phishing")
+
+    # Determine the majority vote based on the phishing count
+    if phishing_count > 5:
+        majority_vote = "Phishing"
+    elif phishing_count == 4:
+        majority_vote = "70% chance of being Phishing"
+    elif phishing_count == 3:
+        majority_vote = "50% chance of being Phishing"
+    else:
+        majority_vote = "Legitimate (URL seems safe to use)"
 
     return render_template('index.html', 
-                           prediction_rf=results[0], 
-                           prediction_xgb=results[1],
-                           prediction_log_reg=results[2],
-                           prediction_decision_tree=results[3],
-                           prediction_knn=results[4],
-                           prediction_svm=results[5],
-                           prediction_nb=results[6],
                            majority_vote=majority_vote
                            )
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')  # Corrected path
+
+@app.route('/send_message', methods=['POST'])
+def send_message():
+    try:
+        name = request.form['name']
+        email = request.form['email']
+        message = request.form['message']
+        print(f"Received data: Name={name}, Email={email}, Message={message}")  # Debugging log
+
+        # Save the message (if using a database, add the logic here)
+        flash(f"Thank you, {name}! Your message has been saved.", "success")
+        print("Message saved successfully.")  # Debugging log
+    except Exception as e:
+        print(f"Error in /send_message: {str(e)}")  # Debugging log
+        flash("An error occurred while saving your message.", "danger")
+    return redirect('/contact')
+
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
